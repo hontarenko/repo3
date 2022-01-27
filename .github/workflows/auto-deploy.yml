@@ -14,8 +14,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v1
-      - name: copy file via ssh key
-        uses: appleboy/scp-action@master
+
+      - name: SCP Command to Transfer Files
+        uses: appleboy/scp-action@v0.1.2
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -23,3 +24,4 @@ jobs:
           key: ${{ secrets.KEY }}
           source: "*"
           target: "code"
+          rm: true
