@@ -3,35 +3,44 @@ on:
   push:
     branches:
       - 'main'
-#  pull_request:
-#    branches:
-#      - 'main'
-#    types:
-#      - synchronize
+
 jobs:
   Pull-repository-on-server:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - remote_host: 3.67.72.253
+            remote_user: ec2-user
+            target: code
+
+          - remote_host: 18.197.124.148
+            remote_user: ec2-user
+            target: test
+
     steps:
       - name: checkout
         uses: actions/checkout@v1
+
       - name: Deploy to Server1
         uses: easingthemes/ssh-deploy@main
         env:
             SSH_PRIVATE_KEY: ${{ secrets.KEY }}
             ARGS: "-avzr --delete"
             SOURCE: "."
-            REMOTE_HOST: ${{ secrets.HOST }}
-            REMOTE_USER: ${{ secrets.USERNAME }}
-            TARGET: code
+            REMOTE_HOST: ${{ matrix.remote_host }}
+            REMOTE_USER: ${{ matrix.remote_user }}
+            TARGET: {{ matrix.target }}
             EXCLUDE: ".git, .github"
-      - name: Deploy to Server2
-        uses: easingthemes/ssh-deploy@main
-        env:
-            SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-            ARGS: "-avzr --delete"
-            SOURCE: "."
-            REMOTE_HOST: ${{ secrets.HOST2 }}
-            REMOTE_USER: ${{ secrets.USERNAME }}
-            TARGET: test
-            EXCLUDE: ".git, .github"
+
+#      - name: Deploy to Server2
+#        uses: easingthemes/ssh-deploy@main
+#        env:
+#            SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+#            ARGS: "-avzr --delete"
+#            SOURCE: "."
+#            REMOTE_HOST: ${{ secrets.HOST2 }}
+#            REMOTE_USER: ${{ secrets.USERNAME2 }}
+#            TARGET: test
+#            EXCLUDE: ".git, .github"
 
