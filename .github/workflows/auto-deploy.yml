@@ -30,7 +30,7 @@ jobs:
             SOURCE: "."
             REMOTE_HOST: ${{ matrix.remote_host }}
             REMOTE_USER: ${{ matrix.remote_user }}
-            TARGET: {{ matrix.target }}
+            TARGET: ${{ matrix.target }}
             EXCLUDE: ".git, .github"
 
 #      - name: Deploy to Server2
