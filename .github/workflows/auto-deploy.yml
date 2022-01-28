@@ -22,7 +22,7 @@ jobs:
       - name: Run SSH command
         uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          command: tar -zcvf /tmp/${{ matrix.target }}.tar.gz ${{ matrix.target }}
+          command: tar -zcvf /tmp/${{ matrix.target }}.tar.gz ${{ matrix.target }}/app
           host: ${{ matrix.remote_host }}
           username: ${{ matrix.remote_user }}
           privateKey: ${{ secrets.KEY }}
@@ -30,7 +30,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v1
 
-      - name: Deploy to Server1
+      - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
             SSH_PRIVATE_KEY: ${{ secrets.KEY }}
@@ -40,15 +40,4 @@ jobs:
             REMOTE_USER: ${{ matrix.remote_user }}
             TARGET: ${{ matrix.target }}
             EXCLUDE: ".git, .github"
-
-#      - name: Deploy to Server2
-#        uses: easingthemes/ssh-deploy@main
-#        env:
-#            SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-#            ARGS: "-avzr --delete"
-#            SOURCE: "."
-#            REMOTE_HOST: ${{ secrets.HOST2 }}
-#            REMOTE_USER: ${{ secrets.USERNAME2 }}
-#            TARGET: test
-#            EXCLUDE: ".git, .github"
 
