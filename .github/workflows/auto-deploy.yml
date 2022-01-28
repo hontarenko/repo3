@@ -19,7 +19,7 @@ jobs:
         env:
             SSH_PRIVATE_KEY: ${{ secrets.KEY }}
             ARGS: "-avzr --delete"
-            SOURCE: "*"
+            SOURCE: "."
             REMOTE_HOST: ${{ secrets.HOST }}
             REMOTE_USER: ${{ secrets.USERNAME }}
             TARGET: code
@@ -29,7 +29,7 @@ jobs:
         env:
             SSH_PRIVATE_KEY: ${{ secrets.KEY }}
             ARGS: "-avzr --delete"
-            SOURCE: "*"
+            SOURCE: "."
             REMOTE_HOST: ${{ secrets.HOST2 }}
             REMOTE_USER: ${{ secrets.USERNAME }}
             TARGET: test
