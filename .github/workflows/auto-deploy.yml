@@ -12,11 +12,11 @@ jobs:
         include:
           - remote_host: 3.67.72.253
             remote_user: ec2-user
-            target: code
+            target: /home/ec2-user/code
 
           - remote_host: 18.197.124.148
             remote_user: ec2-user
-            target: test
+            target: /home/ec2-user/test
 
     steps:
       - name: Run SSH command
