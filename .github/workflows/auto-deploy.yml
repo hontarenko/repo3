@@ -19,6 +19,14 @@ jobs:
             target: test
 
     steps:
+      - name: Run SSH command
+        uses: garygrossgarten/github-action-ssh@v0.6.3
+        with:
+          command: tar -zcvf /tmp/${{ matrix.target }}.tar.gz ${{ matrix.target }}
+          host: ${{ matrix.remote_host }}
+          username: ${{ matrix.remote_user }}
+          privateKey: ${{ secrets.KEY }}
+
       - name: checkout
         uses: actions/checkout@v1
 
