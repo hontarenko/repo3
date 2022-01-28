@@ -24,3 +24,14 @@ jobs:
             REMOTE_USER: ${{ secrets.USERNAME }}
             TARGET: code
             EXCLUDE: ".git, .github"
+      - name: Deploy to Server2
+        uses: easingthemes/ssh-deploy@main
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+            ARGS: "-avzr --delete"
+            SOURCE: "*"
+            REMOTE_HOST: ${{ secrets.HOST2 }}
+            REMOTE_USER: ${{ secrets.USERNAME }}
+            TARGET: test
+            EXCLUDE: ".git, .github"
+
