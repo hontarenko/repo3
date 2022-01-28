@@ -5,7 +5,7 @@ on:
       - 'main'
 
 jobs:
-  Bckups:
+  Backups:
     runs-on: ubuntu-latest
     strategy:
       matrix:
