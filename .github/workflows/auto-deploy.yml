@@ -28,7 +28,7 @@ jobs:
 #          privateKey: ${{ secrets.KEY }}
 
   Pull-repository-on-server:
-    needs: Backups
+#    needs: Backups
     runs-on: ubuntu-latest
     strategy:
       matrix:
