@@ -1,31 +1,13 @@
 name: GitHub Actions Demo
 on:
   push:
+    paths:
+      - config.yaml
+      - genesis.yaml
     branches:
       - 'main'
 #sdfdsf
 jobs:
-#  Backups:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        include:
-#          - remote_host: 54.93.244.229
-#            remote_user: ec2-user
-#            target: code
-#
-#          - remote_host: 3.66.213.176
-#            remote_user: ec2-user
-#            target: test
-#
-#    steps:
-#      - name: Run SSH command
-#        uses: garygrossgarten/github-action-ssh@v0.6.3
-#        with:
-#          command: tar -zcf /tmp/${{ matrix.target }}.tar.gz /home/ec2-user/${{ matrix.target }}/app
-#          host: ${{ matrix.remote_host }}
-#          username: ${{ matrix.remote_user }}
-#          privateKey: ${{ secrets.KEY }}
 
   Pull-repository-on-server:
 #    needs: Backups
