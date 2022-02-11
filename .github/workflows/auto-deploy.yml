@@ -26,14 +26,11 @@ jobs:
           image: ansible/ansible-runner:1
           options: -v ${{ github.workspace }}:/work
           run: |
-            ls -la
-            export ANSIBLE_CONFIG=/work/ansible.cfg
-            echo "${{ secrets.ID_RSA }}" > /work/id_rsa
-            chmod 600 /work/id_rsa
-            ls -la /work/
-            ansible-playbookdddd -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml
+            export ANSIBLE_CONFIG=/work/ansible.cfg && \
+            echo "${{ secrets.ID_RSA }}" > /work/id_rsa && \
+            chmod 600 /work/id_rsa && \
+            ansible-playbookdddd -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
             rm /work/id_rsa
-            ls -la /work/
 
       - name: Slack Notification
         uses: 8398a7/action-slack@v3
