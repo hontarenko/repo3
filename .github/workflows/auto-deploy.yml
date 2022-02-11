@@ -32,7 +32,21 @@ jobs:
             rm /work/id_rsa
 
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "attachments": [
+                {
+                  "title": "Allure Report URL:",
+                  "color": "${{job.status}}" === "success" ? "good" : "${{job.status}}" === "failure" ? "danger" : "warning",
+                  "text": "${{steps.allure-report.outputs.report-url}}"
+                }
+              ]
+            }
         env:
-          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+        if: always()
+
 
