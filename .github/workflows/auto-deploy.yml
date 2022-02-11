@@ -30,7 +30,5 @@ jobs:
           image: ansible/ansible-runner:1
           options: -v ${{ github.workspace }}:/work
           run: |
-            echo '${{ secrets.ID_RSA }}' > id_rsa
-            cat id_rsa
-            ansible-playbook -i "${{ matrix.remote_host }}," -u ubuntu --private-key "id_rsa" /work/genesis.yaml
+            ansible-playbook -i "${{ matrix.remote_host }}," -u ubuntu --private-key ${{ secrets.ID_RSA }} /work/genesis.yaml
 
