@@ -1,112 +1,112 @@
 ---
-- hosts: localhost
-  connection: local
-  gather_facts: false
-  vars_files:
-    - aws-cred.yaml
-    - config.yaml
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
+#- hosts: localhost
+#  connection: local
+#  gather_facts: false
+#  vars_files:
+#    - aws-cred.yaml
+#    - config.yaml
+#  vars:
+#    ansible_python_interpreter: /usr/bin/python3
+#
+#  tasks:
+#    - name: Installing boto3 and boto
+#      pip:
+#        name:
+#          - boto
+#          - boto3
+#        state: present
+#
+#    - name: Obtain default VPC information
+#      ec2_vpc_net_facts:
+#        region: "{{ aws_region }}"
+#        aws_access_key: "{{ aws_access_key }}"
+#        aws_secret_key: "{{ aws_secret_key }}"
+#        filters:
+#          "isDefault": "true"
+#      register: default_vpc
+#
+#    - name: Obtain subnets for default VPC
+#      ec2_vpc_subnet_facts:
+#        region: "{{ aws_region }}"
+#        aws_access_key: "{{ aws_access_key }}"
+#        aws_secret_key: "{{ aws_secret_key }}"
+#        filters:
+#          vpc-id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
+#      register: subnet_info
+#
+#    - set_fact:
+#        vpc_id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
+#        random_subnet: "{{ subnet_info.subnets|map(attribute='id')|list|random }}"
+#
+#    - name: Creating a new EC2 key
+#      ec2_key:
+#        name: "{{ key_name }}"
+#        aws_access_key: "{{ aws_access_key }}"
+#        aws_secret_key: "{{ aws_secret_key }}"
+#        region: "{{ aws_region }}"
+#      register: ec2_key_result
+#
+#    - name: Saving private key
+#      copy: content="{{ ec2_key_result.key.private_key }}" dest="./{{ key_name }}.pem" mode=0600
+#      when: ec2_key_result.changed
+#
+#    - name: Creating Security Group
+#      ec2_group:
+#        name: Web
+#        description: Security Group allowing port for http and ssh
+#        region: "{{ aws_region }}"
+#        aws_access_key: "{{ aws_access_key }}"
+#        aws_secret_key: "{{ aws_secret_key }}"
+#        vpc_id: "{{ vpc_id }}"
+#        rules:
+#          - proto: tcp
+#            from_port: 80
+#            to_port: 80
+#            cidr_ip: 0.0.0.0/0
+#          - proto: tcp
+#            from_port: 22
+#            to_port: 22
+#            cidr_ip: 0.0.0.0/0
+#        rules_egress:
+#           - proto: all
+#             cidr_ip: 0.0.0.0/0
+#
+#    - name: Provision instance
+#      ec2:
+#        aws_access_key: "{{ aws_access_key }}"
+#        aws_secret_key: "{{ aws_secret_key }}"
+#        key_name: "{{ key_name }}"
+#        instance_type: "{{ instance_type }}"
+#        image: "{{ ami_id }}"
+#        wait: yes
+#        group: Web
+#        count: 1
+#        vpc_subnet_id: "{{ random_subnet }}"
+#        assign_public_ip: yes
+#        region: "{{ aws_region }}"
+#        instance_tags:
+#          Name: Web
+#      register: ec2
+#
+#    - name: Adding new instance to host group
+#      local_action: lineinfile
+#        path="inventory/host"
+#        regexp={{ item.public_ip }}
+#        insertafter="[genesis]" line="{{ item.public_ip }} ansible_user=ubuntu ansible_ssh_private_key_file=./{{ key_name }}.pem ansible_ssh_extra_args='-o StrictHostKeyChecking=no'"
+#      loop: "{{ ec2.instances }}"
+#
+#    - name: "Refreshing hosts file"
+#      meta: refresh_inventory
+#
+#    - name: Waiting for SSH to come up
+#      wait_for:
+#        host: "{{ item.public_dns_name }}"
+#        port: 22
+#        state: started
+#      loop: "{{ ec2.instances }}"
 
-  tasks:
-    - name: Installing boto3 and boto
-      pip:
-        name:
-          - boto
-          - boto3
-        state: present
 
-    - name: Obtain default VPC information
-      ec2_vpc_net_facts:
-        region: "{{ aws_region }}"
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        filters:
-          "isDefault": "true"
-      register: default_vpc
-
-    - name: Obtain subnets for default VPC
-      ec2_vpc_subnet_facts:
-        region: "{{ aws_region }}"
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        filters:
-          vpc-id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
-      register: subnet_info
-
-    - set_fact:
-        vpc_id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
-        random_subnet: "{{ subnet_info.subnets|map(attribute='id')|list|random }}"
-
-    - name: Creating a new EC2 key
-      ec2_key:
-        name: "{{ key_name }}"
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        region: "{{ aws_region }}"
-      register: ec2_key_result
-
-    - name: Saving private key
-      copy: content="{{ ec2_key_result.key.private_key }}" dest="./{{ key_name }}.pem" mode=0600
-      when: ec2_key_result.changed
-
-    - name: Creating Security Group
-      ec2_group:
-        name: Web
-        description: Security Group allowing port for http and ssh
-        region: "{{ aws_region }}"
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        vpc_id: "{{ vpc_id }}"
-        rules:
-          - proto: tcp
-            from_port: 80
-            to_port: 80
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: 0.0.0.0/0
-        rules_egress:
-           - proto: all
-             cidr_ip: 0.0.0.0/0
-
-    - name: Provision instance
-      ec2:
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
-        key_name: "{{ key_name }}"
-        instance_type: "{{ instance_type }}"
-        image: "{{ ami_id }}"
-        wait: yes
-        group: Web
-        count: 1
-        vpc_subnet_id: "{{ random_subnet }}"
-        assign_public_ip: yes
-        region: "{{ aws_region }}"
-        instance_tags:
-          Name: Web
-      register: ec2
-
-    - name: Adding new instance to host group
-      local_action: lineinfile
-        path="inventory/host"
-        regexp={{ item.public_ip }}
-        insertafter="[genesis]" line="{{ item.public_ip }} ansible_user=ubuntu ansible_ssh_private_key_file=./{{ key_name }}.pem ansible_ssh_extra_args='-o StrictHostKeyChecking=no'"
-      loop: "{{ ec2.instances }}"
-
-    - name: "Refreshing hosts file"
-      meta: refresh_inventory
-
-    - name: Waiting for SSH to come up
-      wait_for:
-        host: "{{ item.public_dns_name }}"
-        port: 22
-        state: started
-      loop: "{{ ec2.instances }}"
-
-
-- hosts: genesis
+- hosts: all
   gather_facts: yes
   become: yes
 

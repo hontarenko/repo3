@@ -2,38 +2,34 @@ name: GitHub Actions Demo
 on:
   push:
     paths:
-      - '(refs/heads/master) (.*inventory/.*)'
+      - 'inventory/host'
     branches:
       - 'main'
-#sdfdsf
 jobs:
 
   Pull-repository-on-server:
-#    needs: Backups
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - remote_host: 54.93.244.229
-            remote_user: ec2-user
-            target: code
-
-          - remote_host: 3.66.213.176
-            remote_user: ec2-user
-            target: test
+        remote_host: [35.156.11.26, 3.127.22.237]
+#        include:
+#          - remote_host: 54.93.244.229
+#            remote_user: ec2-user
+#            target: code
+#
+#          - remote_host: 3.66.213.176
+#            remote_user: ec2-user
+#            target: test
 
     steps:
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-            SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-            ARGS: "-avzr"
-            SOURCE: "."
-            REMOTE_HOST: ${{ matrix.remote_host }}
-            REMOTE_USER: ${{ matrix.remote_user }}
-            TARGET: ${{ matrix.target }}
-            EXCLUDE: ".git, .github"
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: ansible/ansible-runner:1
+          options: -v ${{ github.workspace }}:/work
+          run: |
+            echo "Running Script"
+            ansible-playbook -i ${{ matrix.remote_host }} -u ubuntu --private-key ${{ secrets.ID_RSA }} genesis.yaml
 
