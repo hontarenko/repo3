@@ -37,4 +37,4 @@ jobs:
             ls -la /work/
             export ANSIBLE_CONFIG=/work/ansible.cfg
             gpg --quiet --batch --yes --decrypt --passphrase="$LARGE_SECRET_PASSPHRASE" --output /work/id_rsa id_rsa.gpg
-            ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key id_rsa /work/genesis.yaml
+            ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml
