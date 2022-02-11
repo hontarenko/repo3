@@ -28,9 +28,10 @@ jobs:
           run: |
             ls -la
             export ANSIBLE_CONFIG=/work/ansible.cfg
-            echo "${{ secrets.ID_RSA }}" > /work/id_rsa
+            echo "${{ secrets.ID_RSA }}" > `git rev-parse --show-toplevel`/id_rsa
             chmod 600 /work/id_rsa
             ls -la /work/
             ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml
             rm /work/id_rsa
             ls -la /work/
+
