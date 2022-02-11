@@ -32,6 +32,6 @@ jobs:
           run: |
             ls -la
             ls -la /work/
-            export ANSIBLE_HOST_KEY_CHECKING=False
+            export ANSIBLE_CONFIG=/work/ansible.cfg
             ansible-playbook -i "${{ matrix.remote_host }}," -u ubuntu --private-key '${{ secrets.ID_RSA }}' /work/genesis.yaml
 
