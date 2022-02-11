@@ -2,8 +2,7 @@ name: GitHub Actions Demo
 on:
   push:
     paths:
-      - '.github/workflows/*'
-      - 'inventory/*'
+      - 'dddd/(asdas|jj)/*'
     branches:
       - 'main'
 env:
