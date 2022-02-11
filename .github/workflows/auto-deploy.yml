@@ -29,15 +29,11 @@ jobs:
             export ANSIBLE_CONFIG=/work/ansible.cfg && \
             echo "${{ secrets.ID_RSA }}" > /work/id_rsa && \
             chmod 600 /work/id_rsa && \
-            ansible-playbook-v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
+            ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
             rm /work/id_rsa
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-        if: always()
+          SLACK_WEBHOOK: ${{secrets.SLACK_WEBHOOK_URL}}
 
