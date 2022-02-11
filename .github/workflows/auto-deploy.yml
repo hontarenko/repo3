@@ -2,8 +2,8 @@ name: GitHub Actions Demo
 on:
   push:
     paths:
-      - '.github/workflows/'
-      - 'inventory/'
+      - '.github/workflows/*'
+      - 'inventory/*'
     branches:
       - 'main'
 env:
