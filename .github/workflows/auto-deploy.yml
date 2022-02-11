@@ -5,6 +5,8 @@ on:
       - 'inventory/host'
     branches:
       - 'main'
+env:
+  PRIVATE_KEY: ${{ secrets.ID_RSA }}
 jobs:
 
   Pull-repository-on-server:
@@ -33,4 +35,4 @@ jobs:
             ls -la
             ls -la /work/
             export ANSIBLE_CONFIG=/work/ansible.cfg
-            ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key '${{ secrets.ID_RSA }}' /work/genesis.yaml
+            ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key '${{ env.PRIVATE_KEY }}' /work/genesis.yaml
