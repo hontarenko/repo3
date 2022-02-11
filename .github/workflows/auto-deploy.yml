@@ -31,5 +31,5 @@ jobs:
           options: -v ${{ github.workspace }}:/work
           run: |
             echo "Running Script"
-            ansible-playbook -i ${{ matrix.remote_host }} -u ubuntu --private-key "${{ secrets.ID_RSA }}" genesis.yaml
+            ansible-playbook -i ${{ matrix.remote_host }} -u ubuntu --private-key "${{ secrets.ID_RSA }}" /work/genesis.yaml
 
