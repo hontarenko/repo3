@@ -9,8 +9,8 @@ on:
 env:
   PRIVATE_KEY: ${{ secrets.ID_RSA }}
   LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-jobs:
 
+jobs:
   Pull-repository-on-server:
     runs-on: ubuntu-latest
     strategy:
@@ -29,7 +29,7 @@ jobs:
             export ANSIBLE_CONFIG=/work/ansible.cfg && \
             echo "${{ secrets.ID_RSA }}" > /work/id_rsa && \
             chmod 600 /work/id_rsa && \
-            ansible-playbookdddd -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
+            ansible-playbook-v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
             rm /work/id_rsa
 
       - name: Slack Notification
