@@ -30,5 +30,7 @@ jobs:
           image: ansible/ansible-runner:1
           options: -v ${{ github.workspace }}:/work
           run: |
+            ls -la
+            ls -la /work/
             ansible-playbook -i "${{ matrix.remote_host }}," -u ubuntu --private-key '${{ secrets.ID_RSA }}' /work/genesis.yaml
 
