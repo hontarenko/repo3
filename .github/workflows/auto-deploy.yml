@@ -2,7 +2,7 @@ name: GitHub Actions Demo
 on:
   push:
     paths:
-      - 'inventory/host'
+      - '.github/workflows/auto-deploy.yml'
     branches:
       - 'main'
 env:
@@ -15,14 +15,6 @@ jobs:
     strategy:
       matrix:
         remote_host: [35.156.11.26, 3.127.22.237]
-#        include:
-#          - remote_host: 54.93.244.229
-#            remote_user: ec2-user
-#            target: code
-#
-#          - remote_host: 3.66.213.176
-#            remote_user: ec2-user
-#            target: test
 
     steps:
       - name: checkout
@@ -34,8 +26,8 @@ jobs:
           options: -v ${{ github.workspace }}:/work
           run: |
             ls -la
-            ls -la /work/
             export ANSIBLE_CONFIG=/work/ansible.cfg
-            gpg --quiet --batch --yes --decrypt --passphrase="${{ env.LARGE_SECRET_PASSPHRASE }}" --output /work/id_rsa /work/id_rsa.gpg
-            ls
+            echo "${{ secrets.ID_RSA }}" > /work/id_rsa
+            chmod 600 /work/id_rsa
+            ls -la /work/
             ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml
