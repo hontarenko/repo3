@@ -31,15 +31,15 @@ jobs:
             ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
             rm /work/id_rsa
 
-      - name: Slack Notification
-        uses: 8398a7/action-slack@v3
-        with:
-          icon_emoji: ':octocat:'
-          status: ${{ job.status }}
-          fields: repo,author,eventName,workflow,job
-        env:
-          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        if: always()
+#      - name: Slack Notification
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          icon_emoji: ':octocat:'
+#          status: ${{ job.status }}
+#          fields: repo,author,eventName,workflow,job
+#        env:
+#          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+#          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+#        if: always()
 
 
