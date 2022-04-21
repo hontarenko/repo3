@@ -2,7 +2,7 @@ name: GitHub Actions Demo
 on:
   push:
     paths:
-      - '.github/workflows/*'
+      - '.github/workflows/**'
     branches:
       - 'main'
 env:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        remote_host: [35.156.11.26, 3.127.22.237]
+        remote_host: [3.69.45.82, 18.193.114.201]
 
     steps:
       - name: checkout
@@ -22,13 +22,13 @@ jobs:
 
       - uses: addnab/docker-run-action@v3
         with:
-          image: ansible/ansible-runner:1
+          image: quay.io/ansible/ansible-runner
           options: -v ${{ github.workspace }}:/work
           run: |
             export ANSIBLE_CONFIG=/work/ansible.cfg && \
             echo "${{ secrets.ID_RSA }}" > /work/id_rsa && \
             chmod 600 /work/id_rsa && \
-            ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yamlf && \
+            ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
             rm /work/id_rsa
 
       - name: Slack Notification
