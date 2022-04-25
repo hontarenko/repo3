@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
 env:
-  PRIVATE_KEY: `git rev-parse --show-toplevel`/id_rsa
+  PRIVATE_KEY: 'id_rsa'
   LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
 
 concurrency:
@@ -34,7 +34,7 @@ jobs:
           echo "${{ secrets.ID_RSA }}" > ${{ env.PRIVATE_KEY }} && \
           chmod 600 ${{ env.PRIVATE_KEY }} && \
           echo `git rev-parse --show-toplevel`
-          ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "${{ env.PRIVATE_KEY }}" genesis.yaml && \
+          ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "`git rev-parse --show-toplevel`/${{ env.PRIVATE_KEY }}" genesis.yaml && \
           rm ${{ env.PRIVATE_KEY }}
 
 
