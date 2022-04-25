@@ -9,6 +9,10 @@ env:
   PRIVATE_KEY: ${{ secrets.ID_RSA }}
   LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Pull-repository-on-server:
     runs-on: ubuntu-latest
