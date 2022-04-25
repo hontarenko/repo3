@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
 env:
-  PRIVATE_KEY: ${{ secrets.ID_RSA }}
+  PRIVATE_KEY: `git rev-parse --show-toplevel`/${{ secrets.ID_RSA }}
   LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
 
 concurrency:
