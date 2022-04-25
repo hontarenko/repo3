@@ -14,22 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        remote_host: [3.69.45.82, 18.193.114.201]
+        remote_host: [52.59.61.136, 35.158.68.117]
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: quay.io/ansible/ansible-runner
-          options: -v ${{ github.workspace }}:/work
-          run: |
-            export ANSIBLE_CONFIG=/work/ansible.cfg && \
-            echo "${{ secrets.ID_RSA }}" > /work/id_rsa && \
-            chmod 600 /work/id_rsa && \
-            ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "/work/id_rsa" /work/genesis.yaml && \
-            rm /work/id_rsa
+      - name: install ansible
+        run: |
+          apt update
+          apt install software-properties-common
+          add-apt-repository --yes --update ppa:ansible/ansible
+          apt install ansible
+          export ANSIBLE_CONFIG=ansible.cfg && \
+          echo "${{ secrets.ID_RSA }}" > id_rsa && \
+          chmod 600 id_rsa && \
+          ansible-playbook -v -i "${{ matrix.remote_host }}," -u ubuntu --private-key "id_rsa" genesis.yaml && \
+          rm id_rsa
+
 
 #      - name: Slack Notification
 #        uses: 8398a7/action-slack@v3
