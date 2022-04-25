@@ -33,6 +33,7 @@ jobs:
           export ANSIBLE_CONFIG=ansible.cfg && \
           echo "${{ secrets.ID_RSA }}" > id_rsa && \
           chmod 600 id_rsa && \
+          echo `git rev-parse --show-toplevel`
           ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "id_rsa" genesis.yaml && \
           rm id_rsa
 
