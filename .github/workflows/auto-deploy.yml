@@ -5,6 +5,8 @@ on:
       - '.github/workflows/**'
     branches:
       - 'main'
+  workflow_dispatch:
+
 env:
   PRIVATE_KEY: 'id_rsa'
   LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
@@ -16,26 +18,28 @@ concurrency:
 jobs:
   Pull-repository-on-server:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        remote_host: [52.59.61.136, 35.158.68.117]
+#    strategy:
+#      matrix:
+#        remote_host: [52.59.61.136, 35.158.68.117]
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
-
-      - name: install ansible
         run: |
-          sudo apt update && \
-          sudo apt install software-properties-common && \
-          sudo add-apt-repository --yes --update ppa:ansible/ansible && \
-          sudo apt install ansible
-          export ANSIBLE_CONFIG=ansible.cfg && \
-          echo "${{ secrets.ID_RSA }}" > ${{ env.PRIVATE_KEY }} && \
-          chmod 600 ${{ env.PRIVATE_KEY }} && \
-          echo `git rev-parse --show-toplevel`
-          ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "`git rev-parse --show-toplevel`/${{ env.PRIVATE_KEY }}" genesis.yaml && \
-          rm ${{ env.PRIVATE_KEY }}
+          docker run hello-world
+          docker ps
+#      - name: install ansible
+#        run: |
+#          sudo apt update && \
+#          sudo apt install software-properties-common && \
+#          sudo add-apt-repository --yes --update ppa:ansible/ansible && \
+#          sudo apt install ansible
+#          export ANSIBLE_CONFIG=ansible.cfg && \
+#          echo "${{ secrets.ID_RSA }}" > ${{ env.PRIVATE_KEY }} && \
+#          chmod 600 ${{ env.PRIVATE_KEY }} && \
+#          echo `git rev-parse --show-toplevel`
+#          ansible-playbook -vvv -i "${{ matrix.remote_host }}," -u ubuntu --private-key "`git rev-parse --show-toplevel`/${{ env.PRIVATE_KEY }}" genesis.yaml && \
+#          rm ${{ env.PRIVATE_KEY }}
 
 
 #      - name: Slack Notification
