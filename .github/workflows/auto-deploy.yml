@@ -49,6 +49,10 @@ jobs:
           	((count++))
           done
         shell: bash
+      - name: bash file
+        run: |
+          chmod +x wait_docker.sh
+          bash wait_docker.sh
 #      - name: install ansible
 #        run: |
 #          sudo apt update && \
