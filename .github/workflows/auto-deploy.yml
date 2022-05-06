@@ -39,7 +39,7 @@ jobs:
           	echo $count
 
           	containers=$(docker ps -q | wc -l)
-
+            echo $containers
           	if [ $containers -gt 0 ]
           		then
           			sleep 1m
